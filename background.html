@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Phantom Studios Holographic Particle Field</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    canvas {
+      display: block;
+    }
+    /* Optional overlay content styling */
+    .header-content {
+      position: absolute;
+      top: 10%;
+      width: 100%;
+      text-align: center;
+      z-index: 10;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+    }
+    .header-content h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px #A600FF;
+    }
+    .header-content p {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+  </style>
+  <!-- Load Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <!-- Optional overlay content -->
+  <div class="header-content">
+    <h1>Phantom Studios</h1>
+    <p>Futuristic Digital Agency</p>
+  </div>
+  <!-- Canvas for Three.js rendering -->
+  <canvas id="threeCanvas"></canvas>
+  
+  <script>
+    // Variables for mouse-driven camera movement
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    // Set up the scene, camera, and renderer
+    let scene = new THREE.Scene();
+    let camera = new THREE.PerspectiveCamera(
+      75, 
+      window.innerWidth / window.innerHeight, 
+      1, 
+      1000
+    );
+    camera.position.z = 150;
+    
+    let renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      canvas: document.getElementById('threeCanvas')
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setClearColor(0x000000, 1);
+    
+    // Create a BufferGeometry for particles
+    const particleCount = 800; // Adjust density as needed
+    const positions = new Float32Array(particleCount * 3);
+    const alphas = new Float32Array(particleCount);
+    const baseColor = new THREE.Color(0xA600FF); // Neon purple
+    
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 800;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 800;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
+      alphas[i] = Math.random() * 0.5 + 0.5; // initial opacity between 0.5 and 1.0
+    }
+    
+    let geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('alpha', new THREE.BufferAttribute(alphas, 1));
+    
+    // Use a custom shader to allow per-particle alpha and twinkle effect.
+    // Vertex shader: Pass alpha to fragment shader.
+    const vertexShader = `
+      attribute float alpha;
+      varying float vAlpha;
+      void main() {
+        vAlpha = alpha;
+        gl_PointSize = 4.0;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
+    // Fragment shader: Use the passed alpha and add a time-based modulation for twinkling.
+    const fragmentShader = `
+      uniform float time;
+      varying float vAlpha;
+      void main() {
+        // Create a circular point
+        vec2 coord = gl_PointCoord - vec2(0.5);
+        float dist = length(coord);
+        if (dist > 0.5) discard;
+        // Modulate alpha to simulate twinkling
+        float twinkle = 0.5 + 0.5 * sin(time + gl_FragCoord.x * 0.1);
+        gl_FragColor = vec4(0.65, 0.0, 1.0, vAlpha * twinkle);
+      }
+    `;
+    
+    // Create a shader material for particles
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0.0 }
+      },
+      vertexShader: vertexShader,
+      fragmentShader: fragmentShader,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexColors: false
+    });
+    
+    let particleSystem = new THREE.Points(geometry, material);
+    scene.add(particleSystem);
+    
+    // Handle window resizing
+    window.addEventListener('resize', onWindowResize, false);
+    function onWindowResize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    
+    // Animate the scene
+    let clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Update time uniform for twinkle effect
+      material.uniforms.time.value = clock.getElapsedTime();
+      
+      // Slowly rotate the particle system for a dynamic effect
+      particleSystem.rotation.y += 0.0005;
+      particleSystem.rotation.x += 0.0002;
+      
+      // Update camera position based on mouse (subtle parallax)
+      // Map mouse coordinates to a target offset (e.g., -25 to 25)
+      let targetX = ((mouseX / window.innerWidth) - 0.5) * 50;
+      let targetY = -((mouseY / window.innerHeight) - 0.5) * 50;
+      
+      // Lerp the camera position toward the target for smooth movement
+      camera.position.x += (targetX - camera.position.x) * 0.05;
+      camera.position.y += (targetY - camera.position.y) * 0.05;
+      camera.lookAt(scene.position);
+      
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
