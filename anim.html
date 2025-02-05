@@ -1,0 +1,104 @@
+<!-- Start of Phantom Studios Loud Animation -->
+<style>
+  /* Import Google Font Montserrat for a sleek, futuristic look */
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+  /* Reset default margins/padding */
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrollbars from the animated background */
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000; /* Fallback background */
+  }
+
+  /* Animated Swirling Gradient Background */
+  .loud-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #8E00FF, #5200AE, #8E00FF);
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+    z-index: 1;
+    opacity: 0.3; /* Semi-transparent overlay for dramatic effect */
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Content Container */
+  .loud-content {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #FFFFFF;
+    padding: 20px;
+  }
+
+  /* Pulsing Headline */
+  .loud-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+
+  /* Subheading */
+  .loud-content p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    opacity: 0.8;
+  }
+
+  /* Pulsating Call-to-Action Button */
+  .loud-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #FFFFFF;
+    background: linear-gradient(45deg, #8E00FF, #5200AE);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: buttonPulse 2s infinite;
+    transition: transform 0.3s;
+  }
+
+  @keyframes buttonPulse {
+    0% { box-shadow: 0 0 10px rgba(142, 0, 255, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(142, 0, 255, 1); }
+    100% { box-shadow: 0 0 10px rgba(142, 0, 255, 0.5); }
+  }
+
+  .loud-button:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<!-- HTML Structure -->
+<div class="loud-bg"></div>
+
+<div class="loud-content">
+  <h1>Phantom Studios</h1>
+  <p>Futuristic Digital Agency</p>
+  <button class="loud-button" onclick="alert('Get Started!')">Get Started</button>
+</div>
+<!-- End of Phantom Studios Loud Animation -->
