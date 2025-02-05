@@ -1,0 +1,159 @@
+<!-- Start of Phantom Studios immersive experience -->
+
+<!-- Styles & Fonts -->
+<style>
+  /* Import Montserrat for a sleek, futuristic look */
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+  /* Reset margins/padding */
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrollbars from the animated background */
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* Fullscreen background for particles */
+  #particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000; /* Dark black background */
+    z-index: 1;
+  }
+
+  /* Content container layered over the particles */
+  .phantom-content {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    color: #FFFFFF;
+  }
+
+  .phantom-content h1 {
+    font-size: 4rem;
+    margin: 0 0 20px;
+  }
+
+  .phantom-content p {
+    font-size: 1.5rem;
+    margin: 0 0 40px;
+    opacity: 0.8;
+  }
+
+  /* CTA Button with purple gradient and hover effects */
+  .cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #FFFFFF;
+    background: linear-gradient(45deg, #8E00FF, #5200AE);
+    border: none;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .cta-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(142, 0, 255, 0.7);
+  }
+</style>
+
+<!-- HTML Structure -->
+<div id="particles-js"></div>
+
+<div class="phantom-content">
+  <h1>Phantom Studios</h1>
+  <p>Futuristic Digital Agency</p>
+  <a href="#" class="cta-button">Get Started</a>
+</div>
+
+<!-- Particles.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+  /* Particle configuration to create a dynamic, techy background */
+  particlesJS("particles-js", {
+    "particles": {
+      "number": {
+        "value": 80,
+        "density": {
+          "enable": true,
+          "value_area": 800
+        }
+      },
+      "color": {
+        "value": "#8E00FF"  /* Purple particles */
+      },
+      "shape": {
+        "type": "circle",
+        "stroke": {
+          "width": 0,
+          "color": "#000000"
+        }
+      },
+      "opacity": {
+        "value": 0.5,
+        "random": false
+      },
+      "size": {
+        "value": 3,
+        "random": true
+      },
+      "line_linked": {
+        "enable": true,
+        "distance": 150,
+        "color": "#5200AE",  /* Deep purple for the lines */
+        "opacity": 0.4,
+        "width": 1
+      },
+      "move": {
+        "enable": true,
+        "speed": 4,
+        "direction": "none",
+        "random": false,
+        "straight": false,
+        "out_mode": "bounce",
+        "attract": {
+          "enable": false
+        }
+      }
+    },
+    "interactivity": {
+      "detect_on": "canvas",
+      "events": {
+        "onhover": {
+          "enable": true,
+          "mode": "grab"
+        },
+        "onclick": {
+          "enable": true,
+          "mode": "push"
+        }
+      },
+      "modes": {
+        "grab": {
+          "distance": 140,
+          "line_linked": {
+            "opacity": 1
+          }
+        },
+        "push": {
+          "particles_nb": 4
+        }
+      }
+    },
+    "retina_detect": true
+  });
+</script>
+
+<!-- End of Phantom Studios immersive experience -->
