@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Proof of AI Detection System</title>
+  <!-- Import Orbitron font for a bold futuristic title -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  <!-- Load Three.js from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #fff; /* White page background */
+      font-family: 'Segoe UI', sans-serif;
+    }
+    /* --- Three.js Canvas for Holographic Background inside Modal --- */
+    #threeModalCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Behind modal content */
+      opacity: 0.5;
+    }
+    /* --- Modal Overlay --- */
+    #modalOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.5s ease;
+    }
+    /* --- Modal Card (Glassmorphic with Electric Blue Neon Outline) --- */
+    #modalContent {
+      position: relative;
+      background: rgba(0, 0, 0, 0.9); /* Dark card background */
+      border-radius: 20px;
+      padding: 40px 20px;
+      min-height: 250px;  /* Less vertical height */
+      max-width: 500px;   /* Wider card */
+      width: 90%;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+      border: 3px solid #00f7ff; /* Electric blue neon outline */
+      z-index: 1;
+      /* Center all content using Flexbox */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    /* --- Title Styling with Animated Gradient --- */
+    #modalTitle {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: 36px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      /* Animated gradient fill matching the card’s outline */
+      background: linear-gradient(45deg, #00f7ff, #82B7DC, #00f7ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientText 3s ease infinite;
+      text-shadow: 0 0 12px rgba(0,255,255,1);
+      text-align: center;
+    }
+    @keyframes gradientText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* --- Subtext Styling --- */
+    #modalSubtext {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(0,255,255,0.8);
+      text-align: center;
+    }
+    /* --- Scan Button with Electric Blue Pulsating Gradient --- */
+    #scanButton {
+      background: linear-gradient(45deg, #00f7ff, #82B7DC, #00f7ff);
+      background-size: 200% 200%;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      box-shadow: 0 0 15px #00f7ff;
+      animation: pulseButton 2s infinite;
+      margin-bottom: 20px;
+    }
+    #scanButton:hover {
+      transform: scale(1.05);
+    }
+    #scanButton:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    @keyframes pulseButton {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    /* --- Scanning Message Area --- */
+    #scanMessage {
+      font-size: 16px;
+      min-height: 40px;
+      margin-bottom: 10px;
+      opacity: 0.9;
+      text-align: center;
+    }
+    /* --- Loading Bar --- */
+    #loadingBarContainer {
+      margin-top: 10px;
+      width: 100%;
+      height: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 5px;
+      overflow: hidden;
+      display: none;
+    }
+    #loadingBar {
+      height: 100%;
+      width: 0%;
+      background: #00cc66; /* Will turn green on success */
+      border-radius: 5px;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <!-- Modal Overlay containing the Three.js canvas and modal content -->
+  <div id="modalOverlay">
+    <!-- Three.js Canvas for Holographic 3D Background inside Modal -->
+    <canvas id="threeModalCanvas"></canvas>
+    <!-- Modal Card Content -->
+    <div id="modalContent">
+      <h1 id="modalTitle">Proof of AI Detection System</h1>
+      <p id="modalSubtext">Complete your scan to enter</p>
+      <button id="scanButton">Scan</button>
+      <p id="scanMessage"></p>
+      <div id="loadingBarContainer">
+        <div id="loadingBar"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    /*****************
+     * THREE.JS SETUP *
+     *****************/
+    // Set up the Three.js scene—but do not start animation until Scan is pressed.
+    const threeCanvas = document.getElementById('threeModalCanvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 50;
+    const renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x000000, 0); // Transparent background
+
+    // Create a wireframe icosahedron for a holographic, phantom-like effect
+    const geometry = new THREE.IcosahedronGeometry(15, 1);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00f7ff,
+      wireframe: true,
+      opacity: 0.8,
+      transparent: true,
+      blending: THREE.AdditiveBlending
+    });
+    const icosahedron = new THREE.Mesh(geometry, material);
+    scene.add(icosahedron);
+
+    // Ambient light for a subtle glow
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    // Resize Three.js canvas on window resize
+    function onThreeResize() {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', onThreeResize);
+
+    // Animate the 3D object (to be called when scan starts)
+    function animateThree() {
+      requestAnimationFrame(animateThree);
+      icosahedron.rotation.x += 0.005;
+      icosahedron.rotation.y += 0.005;
+      renderer.render(scene, camera);
+    }
+    // Note: animateThree() is not called until Scan is pressed.
+
+    /********************
+     * MODAL FUNCTION *
+     ********************/
+    const scanButton = document.getElementById('scanButton');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSubtext = document.getElementById('modalSubtext');
+    const scanMessage = document.getElementById('scanMessage');
+    const loadingBarContainer = document.getElementById('loadingBarContainer');
+    const loadingBar = document.getElementById('loadingBar');
+    const modalOverlay = document.getElementById('modalOverlay');
+
+    // Array of fake scanning messages
+    const scanMessages = [
+      "Analyzing Bitcoin balance...",
+      "Measuring crashout potential...",
+      "Verifying AI authenticity...",
+      "Cross-checking blockchain signatures...",
+      "Finalizing scan..."
+    ];
+
+    scanButton.addEventListener('click', () => {
+      // Hide the subtext immediately when scan starts
+      modalSubtext.style.display = 'none';
+      scanButton.disabled = true;
+      scanButton.style.display = 'none';
+      loadingBarContainer.style.display = 'block';
+
+      // Start the Three.js animation (the 3D icosahedron)
+      animateThree();
+
+      let messageIndex = 0;
+      scanMessage.textContent = scanMessages[messageIndex];
+
+      // Cycle through fake scanning messages every 1.5 seconds
+      const messageInterval = setInterval(() => {
+        messageIndex++;
+        if (messageIndex < scanMessages.length) {
+          scanMessage.textContent = scanMessages[messageIndex];
+        }
+      }, 1500);
+
+      // Simulate a slower loading sequence (approx. 8 seconds total)
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += Math.random() * 8; // Slow increments for dramatic effect
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+          clearInterval(messageInterval);
+          // On complete, update loading bar and modal to success state
+          loadingBar.style.background = '#00cc66'; // Green color
+          // Hide the modal title and display a green checkmark icon above the success message
+          modalTitle.style.display = 'none';
+          scanMessage.innerHTML = 
+            "<div style='margin-bottom:8px;'>" +
+              "<svg width='36' height='36' viewBox='0 0 24 24' fill='#00cc66' xmlns='http://www.w3.org/2000/svg'>" +
+                "<path d='M9 16.17L4.83 12 3.41 13.41 9 19 21 7 19.59 5.59 9 16.17Z'/>" +
+              "</svg>" +
+            "</div>" +
+            "<div style='font-size:24px; color:#00cc66;'>Success!</div>";
+          // Change modal border and box-shadow to green for a complete transition
+          document.getElementById('modalContent').style.border = '3px solid #00cc66';
+          document.getElementById('modalContent').style.boxShadow = '0 0 20px 3px #00cc66';
+          // After a brief delay, fade out and remove the modal overlay
+          setTimeout(() => {
+            modalOverlay.style.opacity = '0';
+            setTimeout(() => {
+              modalOverlay.style.display = 'none';
+            }, 500);
+          }, 1500);
+        }
+        loadingBar.style.width = progress + '%';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
