@@ -4,50 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Big Digital Product with Particle Background</title>
+  <!-- Orbitron font for that futuristic look -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Color scheme variables */
-    :root {
-      --bg-color: #0d0d0d;
-      --text-color: #fff;
-      
-      --card-bg: rgba(0, 0, 0, 0.85);
-      --card-border: #00f7ff;
-      --card-shadow-blue: rgba(0,247,255,0.5);
-      --card-shadow-black: rgba(0, 0, 0, 0.2);
-      
-      --glow-gradient: rgba(0,247,255,0.15);
-      
-      --img-shadow: rgba(0,247,255,0.3);
-      --h2-shadow: rgba(0,247,255,0.5);
-      --p-color: #ddd;
-      
-      --btn-gradient-start: #00f7ff;
-      --btn-gradient-end: #82B7DC;
-      --btn-hover-gradient-start: #82B7DC;
-      --btn-hover-gradient-end: #00f7ff;
-      --btn-text-color: #fff;
-      --btn-shadow: rgba(0,0,0,0.2);
-      --btn-hover-shadow: rgba(0,0,0,0.3);
-      
-      /* For JavaScript: store the particle color as an RGB string */
-      --particle-color: 0,255,255;
-      --particle-shadow-color: 0,255,255;
-    }
-    
-    /* Global Reset & Background */
+    /* Global Reset & Dark Background */
     html, body {
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      background: var(--bg-color);
+      background: #0d0d0d;  /* Dark background to showcase the particle network */
       width: 100%;
       height: 100%;
       font-family: 'Orbitron', sans-serif;
-      color: var(--text-color);
+      color: #fff;
     }
     
-    /* Full-screen canvas for the particle network */
+    /* Full-screen canvas for the particle network background */
     canvas {
       position: fixed;
       top: 0;
@@ -55,10 +27,10 @@
       width: 100vw;
       height: 100vh;
       display: block;
-      z-index: -1;
+      z-index: -1; /* Ensures the canvas stays in the background */
     }
     
-    /* Centering container for the product card */
+    /* Centering container for the big product card */
     .product-container {
       position: absolute;
       top: 50%;
@@ -71,29 +43,38 @@
       padding: 20px;
     }
     
-    /* Big Digital Product Card */
+    /* Big Digital Product Card - Glassmorphic style with electric blue border */
     .product-card {
       position: relative;
       padding: 40px;
       border-radius: 20px;
-      background: var(--card-bg);
+      background: rgba(0, 0, 0, 0.85);  /* Dark, semi-transparent background */
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 2px solid var(--card-border);
-      box-shadow: 0 0 20px 4px var(--card-shadow-blue), 0 8px 32px var(--card-shadow-black);
+      border: 2px solid #00f7ff;         /* Electric blue border */
+      box-shadow: 0 0 20px 4px rgba(0,247,255,0.5), 0 8px 32px rgba(0, 0, 0, 0.2);
       overflow: hidden;
-      color: var(--text-color);
+      color: #fff;
+      
+      /* Initial state for vertical slide up & fade in animation */
       opacity: 0;
       transform: translateY(20px);
       animation: cardSlideUp 1s ease-out forwards;
     }
     
+    /* Keyframes for vertical slide up & fade in animation */
     @keyframes cardSlideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     
-    /* Animated glow overlay */
+    /* Optional animated glow overlay */
     .product-card::before {
       content: '';
       position: absolute;
@@ -101,7 +82,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(45deg, transparent, var(--glow-gradient), transparent);
+      background: linear-gradient(45deg, transparent, rgba(0,247,255,0.15), transparent);
       animation: rotateGlow 10s linear infinite;
       z-index: -1;
     }
@@ -111,30 +92,31 @@
       to { transform: rotate(360deg); }
     }
     
+    /* Product Card Content Styles */
     .product-card img {
       width: 100%;
       border-radius: 15px;
-      box-shadow: 0 4px 15px var(--img-shadow);
+      box-shadow: 0 4px 15px rgba(0,247,255,0.3);
       margin-bottom: 20px;
     }
     
     .product-card h2 {
       font-size: 36px;
       margin: 20px 0;
-      text-shadow: 0 0 5px var(--h2-shadow);
+      text-shadow: 0 0 5px rgba(0,247,255,0.5);
     }
     
     .product-card p {
       font-size: 18px;
       line-height: 1.6;
       margin-bottom: 30px;
-      color: var(--p-color);
+      color: #ddd;
     }
     
     .product-card button {
-      background: linear-gradient(45deg, var(--btn-gradient-start), var(--btn-gradient-end));
+      background: linear-gradient(45deg, #00f7ff, #82B7DC);
       border: none;
-      color: var(--btn-text-color);
+      color: #fff;
       padding: 15px 30px;
       border-radius: 20px;
       font-size: 18px;
@@ -142,64 +124,70 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       cursor: pointer;
-      box-shadow: 0 4px 15px var(--btn-shadow);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       transition: all 0.2s ease;
     }
     
     .product-card button:hover {
-      background: linear-gradient(45deg, var(--btn-hover-gradient-start), var(--btn-hover-gradient-end));
-      box-shadow: 0 6px 20px var(--btn-hover-shadow);
+      background: linear-gradient(45deg, #82B7DC, #00f7ff);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
       transform: scale(1.05);
     }
     
-    /* Responsive adjustments */
+    /* Responsive adjustments for smaller screens */
     @media (max-width: 768px) {
-      .product-container { padding: 20px; width: 90%; }
-      .product-card h2 { font-size: 28px; }
-      .product-card p { font-size: 16px; }
-      .product-card button { font-size: 16px; padding: 12px 24px; }
+      .product-container {
+        width: 90%;
+        padding: 20px;
+      }
+      .product-card h2 {
+        font-size: 28px;
+      }
+      .product-card p {
+        font-size: 16px;
+      }
+      .product-card button {
+        font-size: 16px;
+        padding: 12px 24px;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Particle background canvas -->
+  <!-- Particle network background canvas -->
   <canvas id="backgroundCanvas"></canvas>
   
-  <!-- Product card container -->
+  <!-- Container for the single big digital product card -->
   <div class="product-container">
     <div class="product-card">
       <img src="https://via.placeholder.com/800x400.png?text=Digital+Product" alt="Digital Product">
       <h2>Digital Product Name</h2>
       <p>
-        This is an innovative digital product that revolutionizes the way you work and play.
-        It comes packed with powerful features designed to optimize your workflow and boost productivity.
+        This is an innovative digital product that revolutionizes the way you work and play. It comes packed with powerful features designed to optimize your workflow and boost productivity.
       </p>
       <button>Learn More</button>
     </div>
   </div>
   
   <script>
-    // Read particle colors from CSS variables
-    const rootStyles = getComputedStyle(document.documentElement);
-    const particleColor = rootStyles.getPropertyValue('--particle-color').trim();
-    const particleShadowColor = rootStyles.getPropertyValue('--particle-shadow-color').trim();
-    
+    // Particle Network Background Code
     const canvas = document.getElementById('backgroundCanvas');
     const ctx = canvas.getContext('2d');
-    
-    // Resize canvas to fill viewport
+
+    // Resize the canvas to fill the viewport
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    
-    // Particle settings
+
+    // Particle network settings
     const particleCount = 150;
     const maxDistance = 100;
     const particles = [];
-    
+
+    // Particle class with pulsating glow effect
     class Particle {
       constructor() {
         this.x = Math.random() * canvas.width;
@@ -220,31 +208,29 @@
         ctx.save();
         const pulse = 5 + 15 * Math.abs(Math.sin(time * 3));
         ctx.shadowBlur = pulse;
-        ctx.shadowColor = 'rgba(' + particleShadowColor + ',0.8)';
+        ctx.shadowColor = 'rgba(0,255,255,0.8)';
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + particleColor + ',0.9)';
+        ctx.fillStyle = 'rgba(0,255,255,0.9)';
         ctx.fill();
         ctx.restore();
       }
     }
-    
+
     // Create particles
     for (let i = 0; i < particleCount; i++) {
       particles.push(new Particle());
     }
-    
-    // Animation loop for particles and connecting lines
+
+    // Animation loop for the particle network
     function animate() {
       requestAnimationFrame(animate);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const t = performance.now() / 1000;
-      
       particles.forEach(p => {
         p.update();
         p.draw(t);
       });
-      
       // Draw connecting lines between particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
@@ -256,7 +242,7 @@
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             const linePulse = 0.5 + 0.5 * Math.abs(Math.sin(t * 3));
-            ctx.strokeStyle = 'rgba(' + particleColor + ',' + ((1 - dist / maxDistance) * linePulse) + ')';
+            ctx.strokeStyle = 'rgba(0,255,255,' + ((1 - dist / maxDistance) * linePulse) + ')';
             ctx.lineWidth = 1;
             ctx.stroke();
           }
@@ -266,4 +252,6 @@
     animate();
   </script>
 </body>
+</html>
+
 </html>
