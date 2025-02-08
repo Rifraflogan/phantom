@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Proof of AI Detection System</title>
-  <!-- Import Orbitron font for a bold futuristic title -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet" />
+  <!-- Import Roboto for a professional look -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <!-- Load Three.js from CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
@@ -20,8 +20,9 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      background: #0d0d0d; /* Dark background */
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
     }
     /* --- Three.js Canvas for Holographic Background inside Modal --- */
     #threeModalCanvas {
@@ -47,38 +48,38 @@
       z-index: 10000;
       transition: opacity 0.5s ease;
     }
-    /* --- Modal Card (Glassmorphic with Electric Blue Neon Outline) --- */
+    /* --- Modal Card (Glassmorphic style with subtle purple accents) --- */
     #modalContent {
       position: relative;
       background: rgba(0, 0, 0, 0.9);
-      border-radius: 20px;
+      border-radius: 12px;
       padding: 40px 20px;
       min-height: 250px;
       max-width: 500px;
       width: 90%;
       text-align: center;
       color: #fff;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
-      border: 3px solid #00f7ff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      border: 3px solid #7f5fc5; /* Initial purple border */
       z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
     }
-    /* --- Title Styling with Animated Gradient --- */
+    /* --- Title Styling with Animated Purple Gradient --- */
     #modalTitle {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 900;
+      font-family: 'Roboto', sans-serif;
+      font-weight: 700;
       font-size: 36px;
       letter-spacing: 2px;
       margin-bottom: 20px;
-      background: linear-gradient(45deg, #00f7ff, #82B7DC, #00f7ff);
+      background: linear-gradient(45deg, #7f5fc5, #56428c, #7f5fc5);
       background-size: 200% 200%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       animation: gradientText 3s ease infinite;
-      text-shadow: 0 0 12px rgba(0, 255, 255, 1);
+      text-shadow: 0 0 12px rgba(127,95,197,1);
       text-align: center;
     }
     @keyframes gradientText {
@@ -91,12 +92,12 @@
       font-size: 18px;
       margin-bottom: 20px;
       color: #fff;
-      text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+      text-shadow: 0 0 8px rgba(127,95,197,0.8);
       text-align: center;
     }
-    /* --- Scan Button with Electric Blue Pulsating Gradient --- */
+    /* --- Scan Button with Purple Pulsating Gradient --- */
     #scanButton {
-      background: linear-gradient(45deg, #00f7ff, #82B7DC, #00f7ff);
+      background: linear-gradient(45deg, #7f5fc5, #56428c, #7f5fc5);
       background-size: 200% 200%;
       color: #fff;
       border: none;
@@ -105,7 +106,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: transform 0.2s ease;
-      box-shadow: 0 0 15px #00f7ff;
+      box-shadow: 0 0 15px #7f5fc5;
       animation: pulseButton 2s infinite;
       margin-bottom: 20px;
     }
@@ -142,7 +143,7 @@
     #loadingBar {
       height: 100%;
       width: 0%;
-      background: #00cc66;
+      background: #7f5fc5; /* Initial purple progress bar */
       border-radius: 5px;
       transition: width 0.3s ease;
     }
@@ -189,7 +190,7 @@
     // Create a slightly larger wireframe icosahedron (radius = 10)
     const geometry = new THREE.IcosahedronGeometry(10, 1);
     const material = new THREE.MeshBasicMaterial({
-      color: 0x00f7ff,
+      color: 0x7f5fc5, // Purple wireframe
       wireframe: true,
       opacity: 0.8,
       transparent: true,
@@ -205,11 +206,11 @@
       canvas.width = size;
       canvas.height = size;
       const ctx = canvas.getContext('2d');
-      // Create a horizontal gradient: transparent at edges, bright green center
+      // Create a horizontal gradient: transparent at edges, purple center
       const gradient = ctx.createLinearGradient(0, 0, size, 0);
-      gradient.addColorStop(0, 'rgba(0,255,0,0)');
-      gradient.addColorStop(0.5, 'rgba(0,255,0,1)');
-      gradient.addColorStop(1, 'rgba(0,255,0,0)');
+      gradient.addColorStop(0, 'rgba(127,95,197,0)');
+      gradient.addColorStop(0.5, 'rgba(127,95,197,1)');
+      gradient.addColorStop(1, 'rgba(127,95,197,0)');
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, size, size);
       const texture = new THREE.CanvasTexture(canvas);
@@ -218,7 +219,6 @@
     }
 
     // --- Create the Thicker, Cooler Scanning Bar ---
-    // The bar is now thicker (22×2) and sized relative to the larger shape.
     const scanningBarTexture = createGradientTexture();
     const scanningBarGeometry = new THREE.PlaneGeometry(22, 2);
     const scanningBarMaterial = new THREE.MeshBasicMaterial({
@@ -236,7 +236,6 @@
     scene.add(scanningBar);
 
     // --- Create a Glowing Duplicate for the Scanning Bar ---
-    // This duplicate is slightly larger and uses lower opacity to simulate a glow.
     const scanningBarGlow = scanningBar.clone();
     scanningBarGlow.material = scanningBar.material.clone();
     scanningBarGlow.material.opacity = 0.5;
@@ -302,10 +301,10 @@
 
     // Array of fake scanning messages
     const scanMessages = [
-      "Measuring Solana Balance...",
-      "Analyzing Crashout Potential...",
+      "Measuring Wallet Balance...",
+      "Analyzing Transaction History...",
       "Verifying AI Authenticity...",
-      "Running Band for Band Emulator...",
+      "Calibrating Data Streams...",
       "Initiating Final Scan..."
     ];
 
@@ -339,7 +338,7 @@
           clearInterval(messageInterval);
           scanComplete = true; // Stop scanning bar movement
 
-          // On complete, update UI to a success state
+          // On complete, update UI to a success state using GREEN animation
           loadingBar.style.background = '#00cc66';
           modalTitle.style.display = 'none';
           scanMessage.innerHTML =
