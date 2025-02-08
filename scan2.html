@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Big Digital Product with Particle Background</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* Color scheme variables */
+    :root {
+      --bg-color: #0d0d0d;
+      --text-color: #fff;
+      
+      --card-bg: rgba(0, 0, 0, 0.85);
+      --card-border: #00f7ff;
+      --card-shadow-blue: rgba(0,247,255,0.5);
+      --card-shadow-black: rgba(0, 0, 0, 0.2);
+      
+      --glow-gradient: rgba(0,247,255,0.15);
+      
+      --img-shadow: rgba(0,247,255,0.3);
+      --h2-shadow: rgba(0,247,255,0.5);
+      --p-color: #ddd;
+      
+      --btn-gradient-start: #00f7ff;
+      --btn-gradient-end: #82B7DC;
+      --btn-hover-gradient-start: #82B7DC;
+      --btn-hover-gradient-end: #00f7ff;
+      --btn-text-color: #fff;
+      --btn-shadow: rgba(0,0,0,0.2);
+      --btn-hover-shadow: rgba(0,0,0,0.3);
+      
+      /* For JavaScript: store the particle color as an RGB string */
+      --particle-color: 0,255,255;
+      --particle-shadow-color: 0,255,255;
+    }
+    
+    /* Global Reset & Background */
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      background: var(--bg-color);
+      width: 100%;
+      height: 100%;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-color);
+    }
+    
+    /* Full-screen canvas for the particle network */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      z-index: -1;
+    }
+    
+    /* Centering container for the product card */
+    .product-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      width: 90%;
+      max-width: 800px;
+      text-align: center;
+      padding: 20px;
+    }
+    
+    /* Big Digital Product Card */
+    .product-card {
+      position: relative;
+      padding: 40px;
+      border-radius: 20px;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid var(--card-border);
+      box-shadow: 0 0 20px 4px var(--card-shadow-blue), 0 8px 32px var(--card-shadow-black);
+      overflow: hidden;
+      color: var(--text-color);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: cardSlideUp 1s ease-out forwards;
+    }
+    
+    @keyframes cardSlideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Animated glow overlay */
+    .product-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, var(--glow-gradient), transparent);
+      animation: rotateGlow 10s linear infinite;
+      z-index: -1;
+    }
+    
+    @keyframes rotateGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .product-card img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px var(--img-shadow);
+      margin-bottom: 20px;
+    }
+    
+    .product-card h2 {
+      font-size: 36px;
+      margin: 20px 0;
+      text-shadow: 0 0 5px var(--h2-shadow);
+    }
+    
+    .product-card p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: var(--p-color);
+    }
+    
+    .product-card button {
+      background: linear-gradient(45deg, var(--btn-gradient-start), var(--btn-gradient-end));
+      border: none;
+      color: var(--btn-text-color);
+      padding: 15px 30px;
+      border-radius: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--btn-shadow);
+      transition: all 0.2s ease;
+    }
+    
+    .product-card button:hover {
+      background: linear-gradient(45deg, var(--btn-hover-gradient-start), var(--btn-hover-gradient-end));
+      box-shadow: 0 6px 20px var(--btn-hover-shadow);
+      transform: scale(1.05);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .product-container { padding: 20px; width: 90%; }
+      .product-card h2 { font-size: 28px; }
+      .product-card p { font-size: 16px; }
+      .product-card button { font-size: 16px; padding: 12px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Particle background canvas -->
+  <canvas id="backgroundCanvas"></canvas>
+  
+  <!-- Product card container -->
+  <div class="product-container">
+    <div class="product-card">
+      <img src="https://via.placeholder.com/800x400.png?text=Digital+Product" alt="Digital Product">
+      <h2>Digital Product Name</h2>
+      <p>
+        This is an innovative digital product that revolutionizes the way you work and play.
+        It comes packed with powerful features designed to optimize your workflow and boost productivity.
+      </p>
+      <button>Learn More</button>
+    </div>
+  </div>
+  
+  <script>
+    // Read particle colors from CSS variables
+    const rootStyles = getComputedStyle(document.documentElement);
+    const particleColor = rootStyles.getPropertyValue('--particle-color').trim();
+    const particleShadowColor = rootStyles.getPropertyValue('--particle-shadow-color').trim();
+    
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Resize canvas to fill viewport
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    // Particle settings
+    const particleCount = 150;
+    const maxDistance = 100;
+    const particles = [];
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = 2;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+      draw(time) {
+        ctx.save();
+        const pulse = 5 + 15 * Math.abs(Math.sin(time * 3));
+        ctx.shadowBlur = pulse;
+        ctx.shadowColor = 'rgba(' + particleShadowColor + ',0.8)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + particleColor + ',0.9)';
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+    
+    // Create particles
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+    
+    // Animation loop for particles and connecting lines
+    function animate() {
+      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const t = performance.now() / 1000;
+      
+      particles.forEach(p => {
+        p.update();
+        p.draw(t);
+      });
+      
+      // Draw connecting lines between particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < maxDistance) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            const linePulse = 0.5 + 0.5 * Math.abs(Math.sin(t * 3));
+            ctx.strokeStyle = 'rgba(' + particleColor + ',' + ((1 - dist / maxDistance) * linePulse) + ')';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    animate();
+  </script>
+</body>
+</html>
