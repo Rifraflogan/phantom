@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Deliverables Chain Table</title>
+  <title>Commit Deliverables to Google Sheets</title>
   <style>
     body {
       font-family: 'Roboto', sans-serif;
@@ -10,7 +10,7 @@
       color: #e0e0e0;
       padding: 20px;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
       min-height: 100vh;
     }
@@ -20,6 +20,7 @@
       border-collapse: collapse;
       background-color: #1e1e1e;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin-bottom: 30px;
     }
     th, td {
       border: 1px solid #333;
@@ -32,20 +33,35 @@
     }
     td {
       background-color: #2c2c2c;
-      transition: background-color 0.3s ease;
-      cursor: default;
-    }
-    td:hover {
-      background-color: #3a3a3a;
     }
     .phase {
       font-weight: bold;
       background-color: #333;
     }
+    /* Big Red Button Styling */
+    #commitButton {
+      background-color: #e74c3c;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 1.5em;
+      padding: 15px 30px;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    #commitButton:hover {
+      background-color: #c0392b;
+      transform: scale(1.02);
+    }
+    #commitButton:active {
+      transform: scale(0.98);
+    }
   </style>
 </head>
 <body>
-  <table>
+  <h1>Deliverables Chain</h1>
+  <table id="deliverablesTable">
     <thead>
       <tr>
         <th>Project Phase</th>
@@ -99,5 +115,69 @@
       </tr>
     </tbody>
   </table>
+
+  <!-- Big Red Button -->
+  <button id="commitButton">Commit to Google Sheets</button>
+
+  <script>
+    // Replace with your actual Google Sheets endpoint (e.g., from a published Google Apps Script)
+    const googleSheetsURL = "YOUR_GOOGLE_SHEETS_WEBAPP_URL";
+
+    // Function to extract table data from the deliverables table
+    function extractTableData() {
+      const table = document.getElementById("deliverablesTable");
+      const data = {};
+      
+      // Extract header labels
+      const headers = [];
+      table.querySelectorAll("thead th").forEach(th => {
+        headers.push(th.innerText.trim());
+      });
+      data.headers = headers;
+      
+      // Extract row data from tbody
+      const rows = [];
+      table.querySelectorAll("tbody tr").forEach(row => {
+        const rowData = [];
+        row.querySelectorAll("td").forEach(cell => {
+          rowData.push(cell.innerText.trim());
+        });
+        rows.push(rowData);
+      });
+      data.rows = rows;
+      
+      return data;
+    }
+
+    // Function to commit the table data to Google Sheets via a POST request
+    function commitData() {
+      const tableData = extractTableData();
+      console.log("Committing the following data:", tableData);
+
+      fetch(googleSheetsURL, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(tableData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not OK");
+        }
+        return response.json();
+      })
+      .then(result => {
+        alert("Data committed successfully!\nResponse: " + JSON.stringify(result));
+      })
+      .catch(error => {
+        alert("Error committing data: " + error);
+      });
+    }
+
+    // Attach event listener to the commit button
+    document.getElementById("commitButton").addEventListener("click", commitData);
+  </script>
 </body>
 </html>
