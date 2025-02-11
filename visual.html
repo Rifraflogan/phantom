@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Deliverables Chain Workflow</title>
+  <!-- Ensures proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bio-Tech Deliverables Chain Workflow</title>
+  <!-- Futuristic font for a bio-tech look -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
   <!-- Include Mermaid from CDN -->
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
   <style>
@@ -12,36 +16,71 @@
       padding: 0;
       box-sizing: border-box;
     }
-    /* Overall Body Styles */
+
+    /* Animated background for a futuristic bio-tech feel */
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #121212;
+      font-family: 'Orbitron', sans-serif;
+      background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
+      background-size: 400% 400%;
+      animation: backgroundGradient 15s ease infinite;
       color: #e0e0e0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
-    /* Header Styling */
+
+    @keyframes backgroundGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Header styling with neon glow */
     h1 {
       margin-bottom: 20px;
       color: #ff4081;
-      text-shadow: 1px 1px 2px #000;
+      text-shadow: 0 0 10px #ff4081;
+      font-size: 2rem;
     }
-    /* Mermaid Container Styling */
+
+    /* Mermaid container styling with a subtle scale effect */
     .mermaid {
-      background-color: #1e1e1e;
+      background-color: rgba(30, 30, 30, 0.9);
       border: 2px solid #333;
       border-radius: 10px;
       padding: 20px;
       width: 90%;
       max-width: 1200px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease;
     }
-    /* Optional: Hover effect for clickable nodes (Mermaid will render these in SVG) */
-    svg g[class*="node"] a:hover > rect {
-      stroke: #ff4081;
-      stroke-width: 2px;
+    .mermaid:hover {
+      transform: scale(1.02);
+    }
+
+    /* Style for the flowchart nodes (SVG elements) with a neon glow */
+    .mermaid svg g.node rect {
+      stroke: #00ff9d;
+      stroke-width: 2;
+      fill: #1e1e1e;
+      filter: drop-shadow(0 0 8px #00ff9d);
+      transition: filter 0.3s ease, transform 0.3s ease;
+    }
+    .mermaid svg g.node rect:hover {
+      filter: drop-shadow(0 0 16px #00ff9d);
+      transform: scale(1.05);
+    }
+
+    /* Responsive text adjustments */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      .mermaid {
+        padding: 15px;
+      }
     }
   </style>
   <script>
@@ -54,9 +93,9 @@
   </script>
 </head>
 <body>
-  <h1>Deliverables Chain Workflow</h1>
+  <h1>Bio-Tech Deliverables Chain Workflow</h1>
   <div class="mermaid">
-    %%{init: {'theme': 'dark'}}%%
+    %%{init: {'theme': 'dark', 'flowchart': {'htmlLabels': true}}}%%
     flowchart TD
       A[Client Request Submission]
       B[Requirements Analysis Meeting]
