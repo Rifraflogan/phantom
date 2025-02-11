@@ -2,166 +2,102 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Ensures proper scaling on mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bio-Tech Deliverables Chain Workflow</title>
-  <!-- Futuristic font for a bio-tech look -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-  <!-- Include Mermaid from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+  <title>Deliverables Chain Table</title>
   <style>
-    /* Basic Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Animated background for a futuristic bio-tech feel */
     body {
-      font-family: 'Orbitron', sans-serif;
-      background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
-      background-size: 400% 400%;
-      animation: backgroundGradient 15s ease infinite;
+      font-family: 'Roboto', sans-serif;
+      background-color: #121212;
       color: #e0e0e0;
       padding: 20px;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
-
-    @keyframes backgroundGradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    table {
+      width: 100%;
+      max-width: 1000px;
+      border-collapse: collapse;
+      background-color: #1e1e1e;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
-
-    /* Header styling with neon glow */
-    h1 {
-      margin-bottom: 20px;
-      color: #ff4081;
-      text-shadow: 0 0 10px #ff4081;
-      font-size: 2rem;
+    th, td {
+      border: 1px solid #333;
+      padding: 15px;
+      text-align: center;
     }
-
-    /* Mermaid container styling with a subtle scale effect */
-    .mermaid {
-      background-color: rgba(30, 30, 30, 0.9);
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 20px;
-      width: 90%;
-      max-width: 1200px;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-      transition: transform 0.3s ease;
+    th {
+      background-color: #262626;
+      font-size: 1.1em;
     }
-    .mermaid:hover {
-      transform: scale(1.02);
+    td {
+      background-color: #2c2c2c;
+      transition: background-color 0.3s ease;
+      cursor: default;
     }
-
-    /* Style for the flowchart nodes (SVG elements) with a neon glow */
-    .mermaid svg g.node rect {
-      stroke: #00ff9d;
-      stroke-width: 2;
-      fill: #1e1e1e;
-      filter: drop-shadow(0 0 8px #00ff9d);
-      transition: filter 0.3s ease, transform 0.3s ease;
+    td:hover {
+      background-color: #3a3a3a;
     }
-    .mermaid svg g.node rect:hover {
-      filter: drop-shadow(0 0 16px #00ff9d);
-      transform: scale(1.05);
-    }
-
-    /* Responsive text adjustments */
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.5rem;
-      }
-      .mermaid {
-        padding: 15px;
-      }
+    .phase {
+      font-weight: bold;
+      background-color: #333;
     }
   </style>
-  <script>
-    // Initialize Mermaid with dark theme and responsive flowchart settings
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'dark',
-      flowchart: { useMaxWidth: true, htmlLabels: true }
-    });
-  </script>
 </head>
 <body>
-  <h1>Bio-Tech Deliverables Chain Workflow</h1>
-  <div class="mermaid">
-    %%{init: {'theme': 'dark', 'flowchart': {'htmlLabels': true}}}%%
-    flowchart TD
-      A[Client Request Submission]
-      B[Requirements Analysis Meeting]
-      C[Documentation & Assignment]
-      D[Define Milestones & Deliverables]
-      E[Assign Roles & Responsibilities]
-      F[Develop Project Plan]
-      G[Create Initial Drafts/Mockups]
-      H[Internal Review & Iteration]
-      I[Development Execution]
-      J[Conduct QA Testing]
-      K[Issue Resolution & Re-testing]
-      L[Internal Sign-Off]
-      M[Deliver for Client Review]
-      N[Collect and Analyze Feedback]
-      O[Implement Revisions]
-      P[Finalize Deliverable]
-      Q[Client Sign-Off & Delivery]
-      R[Documentation & Archiving]
-      S[Request Feedback & Testimonials]
-      T[Team Retrospective]
-      U[Performance Reporting]
-
-      A --> B
-      B --> C
-      C --> D
-      D --> E
-      E --> F
-      F --> G
-      G --> H
-      H --> I
-      I --> J
-      J --> K
-      K --> L
-      L --> M
-      M --> N
-      N --> O
-      O --> P
-      P --> Q
-      Q --> R
-      R --> S
-      S --> T
-      T --> U
-
-      %% Add interactive click events to each node
-      click A "javascript:alert('Client Request Submission:\nThe process begins when the client submits a request.');" "Click to see details"
-      click B "javascript:alert('Requirements Analysis Meeting:\nDiscuss project needs with the client and stakeholders.');" "Click to see details"
-      click C "javascript:alert('Documentation & Assignment:\nDocument project details and assign initial responsibilities.');" "Click to see details"
-      click D "javascript:alert('Define Milestones & Deliverables:\nEstablish project milestones and define what needs to be delivered.');" "Click to see details"
-      click E "javascript:alert('Assign Roles & Responsibilities:\nAllocate tasks among team members.');" "Click to see details"
-      click F "javascript:alert('Develop Project Plan:\nCreate a detailed schedule and project plan.');" "Click to see details"
-      click G "javascript:alert('Create Initial Drafts/Mockups:\nDesign initial drafts or mockups of the deliverable.');" "Click to see details"
-      click H "javascript:alert('Internal Review & Iteration:\nReview drafts internally and iterate based on feedback.');" "Click to see details"
-      click I "javascript:alert('Development Execution:\nBegin the actual development or production of the deliverable.');" "Click to see details"
-      click J "javascript:alert('Conduct QA Testing:\nTest the deliverable for quality assurance.');" "Click to see details"
-      click K "javascript:alert('Issue Resolution & Re-testing:\nAddress any issues found during testing and re-test.');" "Click to see details"
-      click L "javascript:alert('Internal Sign-Off:\nObtain final internal approval before client review.');" "Click to see details"
-      click M "javascript:alert('Deliver for Client Review:\nPresent the deliverable to the client for review.');" "Click to see details"
-      click N "javascript:alert('Collect and Analyze Feedback:\nGather and analyze feedback from the client.');" "Click to see details"
-      click O "javascript:alert('Implement Revisions:\nMake revisions based on client feedback.');" "Click to see details"
-      click P "javascript:alert('Finalize Deliverable:\nComplete the final version of the deliverable.');" "Click to see details"
-      click Q "javascript:alert('Client Sign-Off & Delivery:\nObtain final client approval and deliver the product.');" "Click to see details"
-      click R "javascript:alert('Documentation & Archiving:\nArchive all project files and documentation.');" "Click to see details"
-      click S "javascript:alert('Request Feedback & Testimonials:\nReach out to the client for feedback and testimonials.');" "Click to see details"
-      click T "javascript:alert('Team Retrospective:\nConduct an internal meeting to review the project process.');" "Click to see details"
-      click U "javascript:alert('Performance Reporting:\nLog and analyze performance metrics for the project.');" "Click to see details"
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Project Phase</th>
+        <th>Deliverable 1</th>
+        <th>Deliverable 2</th>
+        <th>Deliverable 3</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="phase">Project Initiation & Requirements Gathering</td>
+        <td>Client Request Submission</td>
+        <td>Requirements Analysis Meeting</td>
+        <td>Documentation & Assignment</td>
+      </tr>
+      <tr>
+        <td class="phase">Planning & Scope Definition</td>
+        <td>Define Milestones & Deliverables</td>
+        <td>Assign Roles & Responsibilities</td>
+        <td>Develop Project Plan</td>
+      </tr>
+      <tr>
+        <td class="phase">Design & Development Phase</td>
+        <td>Create Initial Drafts/Mockups</td>
+        <td>Internal Review & Iteration</td>
+        <td>Development Execution</td>
+      </tr>
+      <tr>
+        <td class="phase">Quality Assurance & Testing</td>
+        <td>Conduct QA Testing</td>
+        <td>Issue Resolution & Re-testing</td>
+        <td>Internal Sign-Off</td>
+      </tr>
+      <tr>
+        <td class="phase">Client Review & Feedback</td>
+        <td>Deliver for Client Review</td>
+        <td>Collect and Analyze Feedback</td>
+        <td>Implement Revisions</td>
+      </tr>
+      <tr>
+        <td class="phase">Final Delivery & Documentation</td>
+        <td>Finalize Deliverable</td>
+        <td>Client Sign-Off & Delivery</td>
+        <td>Documentation & Archiving</td>
+      </tr>
+      <tr>
+        <td class="phase">Post-Delivery Follow-Up</td>
+        <td>Request Feedback & Testimonials</td>
+        <td>Team Retrospective</td>
+        <td>Performance Reporting</td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>
